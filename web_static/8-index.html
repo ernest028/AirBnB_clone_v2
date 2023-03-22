@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" type="text/css" href="styles/4-common.css">
-    <link rel="stylesheet" type="text/css" href="styles/3-header.css">
-    <link rel="stylesheet" type="text/css" href="styles/3-footer.css">
-    <link rel="stylesheet" type="text/css" href="styles/6-filters.css">
-    <link type="text/css" rel="stylesheet" href="styles/8-places.css">
-    <link rel="icon" href="images/icon.png" />
-    <title>HBnB</title>
+  <link rel="shortcut icon" type="image/x-icon" href="images/icon.png"/>
+  <link rel="stylesheet" href="styles/4-common.css"/>
+  <link rel="stylesheet" href="styles/3-header.css"/>
+  <link rel="stylesheet" href="styles/3-footer.css"/>
+  <link rel="stylesheet" href="styles/6-filters.css"/>
+  <link rel="stylesheet" href="styles/8-places.css"/>
   </head>
   <body>
     <header>
@@ -17,97 +16,112 @@
       <section class="filters">
 	<div class="locations">
 	  <h3>States</h3>
-	  <h4>California, Arizona</h4>
-	  <div class="popover">
-	    <ul>
-	      <li>
-		<h2>Arizona:</h2>
-		<ul>
-		  <li>Pheonix</li>
-		  <li>Sedona</li>
-		</ul>
-	      </li>
-	      <li>
-		<h2>California:</h2>
-		<ul>
-		  <li>LA</li>
-		  <li>SF</li>
-		</ul>
-	      </li>
-	    </ul>
-	  </div>
+	  <h4>fake contents</h4>
+	  <ul class="popover">
+	    <h2>Arizona</h2>
+	    <li>Pheonix</li>
+	    <li>Place2</li>
+	    <h2>California</h2>
+	    <li>San Francisco</li>
+	    <li>Los Angeles</li>
+	  </ul>
 	</div>
 	<div class="amenities">
 	  <h3>Amenities</h3>
-	  <h4>Internet, Kitchen</h4>
-	  <div class="popover">
-	    <ul>
-	      <li>Internet</li>
-	      <li>TV</li>
-	      <li>Kitchen</li>
-	      <li>Iron</li>
-	    </ul>
-	  </div>
+	  <h4>fake contents</h4>
+	  <ul class="popover">
+	    <li>Internet</li>
+	    <li>Laundry</li>
+	    <li>Kitchen</li>
 	</div>
-	<button type="button">Search</button>
+	<button>
+	  Search
+	</button>
       </section>
       <section class="places">
 	<h1>Places</h1>
 	<article>
-	  <div class="title_box">
-	    <h2>My Home</h2>
-	    <div class="price_by_night">$129</div>
+	  <h2>My home</h2>
+	  <div class="price_by_night">
+	    $80
 	  </div>
 	  <div class="information">
-	    <div class="max_guest">6 Guests</div>
-            <div class="number_rooms">4 Bedroom</div>
-            <div class="number_bathrooms">2 Bathroom</div>
+	    <div class="max_guest">
+	      <div class="icon_group"></div>
+	      1 Guest
+	    </div>
+	    <div class="number_rooms">
+	      <div class="icon_bed"></div>
+	      1 Room
+	    </div>
+	    <div class="number_bathrooms">
+	      <div class="icon_bath"></div>
+	      1 Bathroom
+	    </div>
 	  </div>
 	  <div class="user">
-            <b>Owner:</b> Kevin Yook
+	    <p><b>Owner: </b>Julien Barbier</b>
           </div>
           <div class="description">
-	    This is my personal house in Korea please stay as much as you want if you come to Korea. Also as a complementary there is a tour guide who will help guide you though Seoul me.
+	    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque nunc tortor, tempor et, gravida eu, faucibus vel, justo. Duis dolor eros, laoreet vel, luctus quis, consectetuer at, enim. Sed ac felis at tellus dictum pretium. Quisque cursus lorem ut justo. Pellentesque tempus ultricies quam. Curabitur laoreet elementum velit. Ut purus. Praesent nonummy sem a felis. Duis et elit. Vestibulum risus quam, tempor id, fermentum nec, rhoncus semper, enim. Donec bibendum. Nam semper nulla eget mi gravida posuere.</p>
           </div>
 	</article>
 	<article>
-	  <div class="title_box">
-	    <h2>Tiny House</h2>
-	    <div class="price_by_night">$69</div>
+	  <h2>Tiny house</h2>
+	  <div class="price_by_night">
+	    $65
 	  </div>
 	  <div class="information">
-	    <div class="max_guest">3 Guests</div>
-            <div class="number_rooms">1 Bedroom</div>
-            <div class="number_bathrooms">1 Bathroom</div>
+	    <div class="max_guest">
+	      <div class="icon_group"></div>
+	      6 Guests
+	    </div>
+	    <div class="number_rooms">
+	      <div class="icon_bed"></div>
+	      3 Rooms
+	    </div>
+	    <div class="number_bathrooms">
+	      <div class="icon_bath"></div>
+	      2 Bathrooms
+	    </div>
 	  </div>
 	  <div class="user">
-            <b>Owner:</b> John Doe
+	    <p><b>Owner: </b>Secret Senpai</p>
           </div>
           <div class="description">
-	    This house is John's personal hideout. It contains blood stained walls as a feature to the luxery blury light.
-          </div>
+	    <p>Proin sollicitudin, erat in iaculis euismod, eros wisi ultrices mi, non rhoncus urna urna a risus. Aenean augue odio, pretium et, vulputate a, imperdiet eget, ipsum. Praesent lobortis. Nunc id orci. Donec at nibh. Proin sit amet urna ut enim tincidunt convallis. Nullam eleifend est at urna. Vivamus arcu erat, hendrerit id, tristique vel, semper nec, justo. Etiam tempor metus sed justo. Nunc pellentesque posuere enim.</p>
+	  </div>
 	</article>
 	<article>
-	  <div class="title_box">
-	    <h2>A Suite</h2>
-	    <div class="price_by_night">$179</div>
+	  <h2>A suite</h2>
+	  <div class="price_by_night">
+	    $99
 	  </div>
 	  <div class="information">
-	    <div class="max_guest">4 Guests</div>
-            <div class="number_rooms">4 Bedroom</div>
-            <div class="number_bathrooms">4 Bathroom</div>
+	    <div class="max_guest">
+	      <div class="icon_group"></div>
+	      2 Guests
+	    </div>
+	    <div class="number_rooms">
+	      <div class="icon_bed"></div>
+	      1 Room
+	    </div>
+	    <div class="number_bathrooms">
+	      <div class="icon_bath"></div>
+	      1 Bathroom
+	    </div>
 	  </div>
 	  <div class="user">
-            <b>Owner:</b> Bob
-          </div>
-          <div class="description">
-	    This house is a fine suite created by designer bob. Each room has it's own bathrooms
-          </div>
+	    <p><b>Owner: </b>OG Oppa</p>
+	  </div>
+	  <div class="description">
+	    <p> Aenean dolor massa, mollis non, suscipit vitae, scelerisque semper, arcu. Quisque lacus. In lectus dolor, consectetuer at, adipiscing vitae, molestie vel, sem. Donec sapien elit, placerat at, dapibus nec, lacinia at, enim. Morbi commodo, dolor sed hendrerit egestas, tortor wisi tincidunt velit, in hendrerit tortor neque non lacus. Pellentesque pretium, lacus ut interdum facilisis, orci purus euismod justo, vitae aliquam eros metus quis ipsum. Fusce nec metus. Vivamus dui. Pellentesque metus ante, ultrices ut, varius a, porta vel, nisl. Curabitur nonummy. In tincidunt magna sed nisl. Morbi pede massa, egestas ut, dapibus at, semper ac, lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec ut lectus sit amet purus tincidunt facilisis. </p>
+	  </div>
 	</article>
       </section>
     </div>
     <footer>
-      <p>Holberton School</p>
+      Holberton School
     </footer>
   </body>
 </html>
