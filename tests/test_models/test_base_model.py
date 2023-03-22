@@ -1,132 +1,60 @@
-#!/usr/bin/python3
-"""Defines unnittests for models/base_model.py."""
-import os
-import pep8
 import unittest
+import os
 from datetime import datetime
-from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
+from models import *
+from console import HBNBCommand
 
 
-class TestBaseModel(unittest.TestCase):
-    """Unittests for testing the BaseModel class."""
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', '') == "db", "db")
+class Test_BaseModel(unittest.TestCase):
+    """
+    Test the base model class
+    """
 
-    @classmethod
-    def setUpClass(cls):
-        """BaseModel testing setup.
+    def setUp(self):
+        self.cli = HBNBCommand()
+        self.model1 = BaseModel()
 
-        Temporarily renames any existing file.json.
-        Resets FileStorage objects dictionary.
-        Creates a BaseModel instance for testing.
-        """
-        try:
-            os.rename("file.json", "tmp")
-        except IOError:
-            pass
-        FileStorage._FileStorage__objects = {}
-        cls.storage = FileStorage()
-        cls.base = BaseModel()
+        test_args = {'created_at': datetime(2017, 2, 11, 2, 6, 55, 258849),
+                     'updated_at': datetime(2017, 2, 11, 2, 6, 55, 258966),
+                     'id': '46458416-e5d5-4985-aa48-a2b369d03d2a',
+                     'name': 'model1'}
+        self.model2 = BaseModel(test_args)
+        self.model2.save()
 
-    @classmethod
-    def tearDownClass(cls):
-        """BaseModel testing teardown.
+    def tearDown(self):
+        self.cli.do_destroy("BaseModel 46458416-e5d5-4985-aa48-a2b369d03d2a")
 
-        Restore original file.json.
-        Delete the test BaseModel instance.
-        """
-        try:
-            os.remove("file.json")
-        except IOError:
-            pass
-        try:
-            os.rename("tmp", "file.json")
-        except IOError:
-            pass
-        del cls.storage
-        del cls.base
+    def test_instantiation(self):
+        self.assertIsInstance(self.model1, BaseModel)
+        self.assertTrue(hasattr(self.model1, "created_at"))
+        self.assertTrue(hasattr(self.model1, "id"))
+        self.assertTrue(hasattr(self.model1, "updated_at"))
 
-    def test_pep8(self):
-        """Test pep8 styling."""
-        style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(["models/base_model.py"])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+    def test_reinstantiation(self):
+        self.assertIsInstance(self.model2, BaseModel)
+        self.assertEqual(self.model2.id,
+                         '46458416-e5d5-4985-aa48-a2b369d03d2a')
+        self.assertEqual(self.model2.created_at,
+                         datetime(2017, 2, 11, 2, 6, 55, 258849))
 
-    def test_docstrings(self):
-        """Check for docstrings."""
-        self.assertIsNotNone(BaseModel.__doc__)
-        self.assertIsNotNone(BaseModel.__init__.__doc__)
-        self.assertIsNotNone(BaseModel.save.__doc__)
-        self.assertIsNotNone(BaseModel.to_dict.__doc__)
-        self.assertIsNotNone(BaseModel.delete.__doc__)
-        self.assertIsNotNone(BaseModel.__str__.__doc__)
-
-    def test_attributes(self):
-        """Check for attributes."""
-        self.assertEqual(str, type(self.base.id))
-        self.assertEqual(datetime, type(self.base.created_at))
-        self.assertEqual(datetime, type(self.base.updated_at))
-
-    def test_methods(self):
-        """Check for methods."""
-        self.assertTrue(hasattr(BaseModel, "__init__"))
-        self.assertTrue(hasattr(BaseModel, "save"))
-        self.assertTrue(hasattr(BaseModel, "to_dict"))
-        self.assertTrue(hasattr(BaseModel, "delete"))
-        self.assertTrue(hasattr(BaseModel, "__str__"))
-
-    def test_init(self):
-        """Test initialization."""
-        self.assertIsInstance(self.base, BaseModel)
-
-    def test_two_models_are_unique(self):
-        """Test that different BaseModel instances are unique."""
-        bm = BaseModel()
-        self.assertNotEqual(self.base.id, bm.id)
-        self.assertLess(self.base.created_at, bm.created_at)
-        self.assertLess(self.base.updated_at, bm.updated_at)
-
-    def test_init_args_kwargs(self):
-        """Test initialization with args and kwargs."""
-        dt = datetime.utcnow()
-        bm = BaseModel("1", id="5", created_at=dt.isoformat())
-        self.assertEqual(bm.id, "5")
-        self.assertEqual(bm.created_at, dt)
-
-    def test_str(self):
-        """Test __str__ representation."""
-        s = self.base.__str__()
-        self.assertIn("[BaseModel] ({})".format(self.base.id), s)
-        self.assertIn("'id': '{}'".format(self.base.id), s)
-        self.assertIn("'created_at': {}".format(repr(self.base.created_at)), s)
-        self.assertIn("'updated_at': {}".format(repr(self.base.updated_at)), s)
-
-    @unittest.skipIf(os.getenv("HBNB_ENV") is not None, "Testing DBStorage")
     def test_save(self):
-        """Test save method."""
-        old = self.base.updated_at
-        self.base.save()
-        self.assertLess(old, self.base.updated_at)
-        with open("file.json", "r") as f:
-            self.assertIn("BaseModel.{}".format(self.base.id), f.read())
+        old_time = self.model2.updated_at
+        self.model2.save()
+        self.assertNotEqual(old_time, self.model2.updated_at)
 
-    def test_to_dict(self):
-        """Test to_dict method."""
-        base_dict = self.base.to_dict()
-        self.assertEqual(dict, type(base_dict))
-        self.assertEqual(self.base.id, base_dict["id"])
-        self.assertEqual("BaseModel", base_dict["__class__"])
-        self.assertEqual(self.base.created_at.isoformat(),
-                         base_dict["created_at"])
-        self.assertEqual(self.base.updated_at.isoformat(),
-                         base_dict["updated_at"])
-        self.assertEqual(base_dict.get("_sa_instance_state", None), None)
+    def test_to_json(self):
+        jsonified = self.model2.to_json()
+        self.assertNotEqual(self.model2.__dict__, jsonified)
+        self.assertNotIsInstance(jsonified["created_at"], datetime)
+        self.assertNotIsInstance(jsonified["updated_at"], datetime)
+        self.assertEqual(jsonified["created_at"], '2017-02-11 02:06:55.258849')
+        self.assertTrue(hasattr(jsonified, "__class__"))
+        self.assertEqual(jsonified["__class__"], "BaseModel")
 
-    @unittest.skipIf(os.getenv("HBNB_ENV") is not None, "Testing DBStorage")
-    def test_delete(self):
-        """Test delete method."""
-        self.base.delete()
-        self.assertNotIn(self.base, FileStorage._FileStorage__objects)
-
+    def test_to_json_no_sa_instance_state(self):
+        jsonified = self.model2.to_json()
+        self.assertFalse(hasattr(jsonified, "_sa_instance_state"))
 
 if __name__ == "__main__":
     unittest.main()

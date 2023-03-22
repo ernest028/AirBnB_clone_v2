@@ -1,70 +1,53 @@
 #!/usr/bin/python3
-"""Defines the BaseModel class."""
-import models
-from uuid import uuid4
 from datetime import datetime
+import uuid
+import models
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import String
 
 Base = declarative_base()
 
 
 class BaseModel:
-    """Defines the BaseModel class.
-
-    Attributes:
-        id (sqlalchemy String): The BaseModel id.
-        created_at (sqlalchemy DateTime): The datetime at creation.
-        updated_at (sqlalchemy DateTime): The datetime of last update.
-    """
-
+    """The base class for all storage objects in this project"""
     id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    created_at = Column(DateTime, nullable=False, default=datetime.now())
+    updated_at = Column(DateTime, nullable=False, default=datetime.now())
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new BaseModel.
+        """initialize class object"""
+        if len(args) > 0:
+            for k in args[0]:
+                setattr(self, k, args[0][k])
+        else:
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            self.id = str(uuid.uuid4())
 
-        Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
-        """
-        self.id = str(uuid4())
-        self.created_at = self.updated_at = datetime.utcnow()
-        if kwargs:
-            for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
-                    setattr(self, key, value)
+        if kwargs is not None:
+            for k, v in kwargs.items():
+                setattr(self, k, v)
 
     def save(self):
-        """Update updated_at with the current datetime."""
-        self.updated_at = datetime.utcnow()
+        """method to update self"""
+        self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 
-    def to_dict(self):
-        """Return a dictionary representation of the BaseModel instance.
+    def __str__(self):
+        """edit string representation"""
+        return "[{}] ({}) {}".format(type(self)
+                                     .__name__, self.id, self.__dict__)
 
-        Includes the key/value pair __class__ representing
-        the class name of the object.
-        """
-        my_dict = self.__dict__.copy()
-        my_dict["__class__"] = str(type(self).__name__)
-        my_dict["created_at"] = self.created_at.isoformat()
-        my_dict["updated_at"] = self.updated_at.isoformat()
-        my_dict.pop("_sa_instance_state", None)
-        return my_dict
+    def to_json(self):
+        """convert to json"""
+        dupe = self.__dict__.copy()
+        dupe["created_at"] = str(dupe["created_at"])
+        dupe["updated_at"] = str(dupe["updated_at"])
+        dupe["__class__"] = type(self).__name__
+        if ("_sa_instance_state" in dupe):
+            dupe.pop("_sa_instance_state", 0)
+        return dupe
 
     def delete(self):
-        """Delete the current instance from storage."""
-        models.storage.delete(self)
-
-    def __str__(self):
-        """Return the print/str representation of the BaseModel instance."""
-        d = self.__dict__.copy()
-        d.pop("_sa_instance_state", None)
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, d)
+        models.storage.delete(self.id)
